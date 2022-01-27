@@ -1,4 +1,4 @@
-package com.example.testandroidapp.ui
+package com.example.testandroidapp.di
 
 import com.example.testandroidapp.network.ValuteApiClient
 import com.example.testandroidapp.network.ValuteApiInterface
