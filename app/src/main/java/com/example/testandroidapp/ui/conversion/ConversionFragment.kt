@@ -45,16 +45,20 @@ class ConversionFragment : Fragment() {
         mBinding.btnConvert.setOnClickListener {
             for (i in list) {
                 if (i.CharCode == mBinding.spinnerConversionTo.selectedItem) {
-                    if (mBinding.etConversionFrom.text.toString().isNotEmpty()) {
-                        mBinding.tvConversionResult.text =
-                            String.format("%.4f",
-                                mBinding.etConversionFrom.text.toString()
-                                    .toDouble() / (i.Value.toDouble() / i.Nominal.toDouble())
-                            ) + " ${i.CharCode}"
-                    } else if (mBinding.etConversionFrom.text.toString().isEmpty()) {
-                        mBinding.tvConversionResult.text = "Поле ввода не заполнено"
-                    } else {
-                        mBinding.tvConversionResult.text = "Валюта для конвертации не выбрана"
+                    when {
+                        mBinding.etConversionFrom.text.toString().isNotEmpty() -> {
+                            mBinding.tvConversionResult.text =
+                                String.format("%.4f",
+                                    mBinding.etConversionFrom.text.toString()
+                                        .toDouble() / (i.Value.toDouble() / i.Nominal.toDouble())
+                                ) + " ${i.CharCode}"
+                        }
+                        mBinding.etConversionFrom.text.toString().isEmpty() -> {
+                            mBinding.tvConversionResult.text = "Поле ввода не заполнено"
+                        }
+                        else -> {
+                            mBinding.tvConversionResult.text = "Валюта для конвертации не выбрана"
+                        }
                     }
                 }
             }

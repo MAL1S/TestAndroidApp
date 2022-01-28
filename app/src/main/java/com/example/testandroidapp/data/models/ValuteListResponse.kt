@@ -3,7 +3,7 @@ package com.example.testandroidapp.data.models
 
 import com.google.gson.annotations.SerializedName
 
-data class ValuteList(
+data class ValuteListResponse(
     @SerializedName("Date")
     val date: String,
     @SerializedName("PreviousDate")

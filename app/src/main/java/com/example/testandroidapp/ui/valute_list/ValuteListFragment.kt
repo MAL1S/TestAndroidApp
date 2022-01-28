@@ -1,16 +1,18 @@
 package com.example.testandroidapp.ui.valute_list
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.os.Parcelable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.testandroidapp.R
-import com.example.testandroidapp.data.models.Valute
 import com.example.testandroidapp.databinding.FragmentValuteListBinding
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.*
 
 @AndroidEntryPoint
 class ValuteListFragment : Fragment() {
@@ -20,6 +22,10 @@ class ValuteListFragment : Fragment() {
     private val mViewModel by viewModels<ValueListViewModel>()
 
     private lateinit var mAdapter: ValuteListRecyclerAdapter
+
+    private var rcvState: Parcelable? = null
+
+    private var timer = Timer()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,7 +48,8 @@ class ValuteListFragment : Fragment() {
         mBinding.rcvValute.adapter = mAdapter
 
         mBinding.fabRefresh.setOnClickListener {
-            mViewModel.getValuteList()
+            rcvState = mBinding.rcvValute.layoutManager?.onSaveInstanceState()
+            mViewModel.getValuteList(ifUpdate = true)
         }
     }
 
@@ -51,6 +58,30 @@ class ValuteListFragment : Fragment() {
             mAdapter = ValuteListRecyclerAdapter(it)
             mBinding.rcvValute.adapter = mAdapter
             mAdapter.notifyDataSetChanged()
+            mBinding.rcvValute.layoutManager?.onRestoreInstanceState(rcvState)
         })
+    }
+
+    private fun startValuteUpdateTimer() {
+        timer = Timer()
+        timer.schedule(object : TimerTask() {
+            override fun run() {
+                rcvState = mBinding.rcvValute.layoutManager?.onSaveInstanceState()
+                mViewModel.getValuteList(ifUpdate = true)
+                startValuteUpdateTimer()
+            }
+        }, 600000) //10 minutes
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d("testing", "STARTED")
+        startValuteUpdateTimer()
+    }
+
+    override fun onPause() {
+        timer.cancel()
+        Log.d("testing", "PAUSED")
+        super.onPause()
     }
 }

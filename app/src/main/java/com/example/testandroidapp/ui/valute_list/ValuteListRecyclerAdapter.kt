@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.testandroidapp.data.models.Valute
-import com.example.testandroidapp.data.models.ValuteList
 
 class ValuteListRecyclerAdapter(
     private val valuteList: List<Valute>
