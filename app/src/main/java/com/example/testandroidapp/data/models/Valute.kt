@@ -1,21 +1,22 @@
 package com.example.testandroidapp.data.models
 
-
 import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class Valute(
-    @SerializedName("CharCode")
-    val charCode: String,
     @SerializedName("ID")
-    val iD: String,
-    @SerializedName("Name")
-    val name: String,
-    @SerializedName("Nominal")
-    val nominal: Int,
+    val ID: String,
     @SerializedName("NumCode")
-    val numCode: String,
-    @SerializedName("Previous")
-    val previous: Double,
+    val NumCode: String,
+    @SerializedName("CharCode")
+    val CharCode: String,
+    @SerializedName("Nominal")
+    val Nominal: String,
+    @SerializedName("Name")
+    val Name: String,
     @SerializedName("Value")
-    val value: Double
+    val Value: String,
+    @SerializedName("Previous")
+    val Previous: String
 )

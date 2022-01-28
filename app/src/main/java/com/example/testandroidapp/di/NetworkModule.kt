@@ -5,15 +5,15 @@ import com.example.testandroidapp.network.ValuteApiInterface
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Module
-@InstallIn(SingletonComponent::class)
+@InstallIn(ViewModelComponent::class)
 class NetworkModule {
 
     @Provides
-    @Singleton
     fun provideRetrofitClient(): ValuteApiInterface {
         return ValuteApiClient.getClient()
     }

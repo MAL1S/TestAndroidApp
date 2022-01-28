@@ -13,5 +13,5 @@ data class ValuteList(
     @SerializedName("Timestamp")
     val timestamp: String,
     @SerializedName("Valute")
-    val valuteList: List<Valute>
+    val valute: Any
 )
