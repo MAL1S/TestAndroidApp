@@ -1,19 +1,17 @@
 package com.example.testandroidapp.ui.conversion
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.testandroidapp.R
 import com.example.testandroidapp.data.models.Valute
 import com.example.testandroidapp.databinding.FragmentConversionBinding
-import com.example.testandroidapp.databinding.FragmentValuteListBinding
-import com.example.testandroidapp.ui.valute_list.ValueListViewModel
-import com.example.testandroidapp.ui.valute_list.ValuteListRecyclerAdapter
+import com.example.testandroidapp.ui.ValuteViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -21,9 +19,9 @@ class ConversionFragment : Fragment() {
 
     private val mBinding by viewBinding(FragmentConversionBinding::bind)
 
-    private val mViewModel by viewModels<ValueListViewModel>()
+    private val mViewModel by viewModels<ValuteViewModel>()
 
-    var list = mutableListOf<Valute>()
+    var list = listOf<Valute>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,30 +33,35 @@ class ConversionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initVariables()
         initObservers()
+        initListeners()
 
         mViewModel.getValuteList()
     }
 
-    private fun initVariables() {
+    private fun initListeners() {
         mBinding.btnConvert.setOnClickListener {
             for (i in list) {
-                if (i.CharCode == mBinding.spinnerConversionTo.selectedItem) {
-                    when {
-                        mBinding.etConversionFrom.text.toString().isNotEmpty() -> {
-                            mBinding.tvConversionResult.text =
-                                String.format("%.4f",
-                                    mBinding.etConversionFrom.text.toString()
-                                        .toDouble() / (i.Value.toDouble() / i.Nominal.toDouble())
-                                ) + " ${i.CharCode}"
-                        }
-                        mBinding.etConversionFrom.text.toString().isEmpty() -> {
-                            mBinding.tvConversionResult.text = "Поле ввода не заполнено"
-                        }
-                        else -> {
-                            mBinding.tvConversionResult.text = "Валюта для конвертации не выбрана"
-                        }
+                val item = mBinding.spinnerConversionTo.selectedItem.toString()
+
+                if (i.Name == item.substring(0, item.length - 6)) {
+                    val text = mBinding.etConversionFrom.text.toString()
+                    val isNumber = text.toIntOrNull()
+
+                    if (isNumber == null) {
+                        mBinding.tvConversionResult.text = getString(R.string.entered_nan)
+                    } else if (text.isNotEmpty()) {
+                        mBinding.tvConversionResult.text = getString(
+                            R.string.entered_right,
+                            mBinding.etConversionFrom.text.toString()
+                                .toDouble() / (i.Value.toDouble() / i.Nominal.toDouble()),
+                            i.CharCode
+                        )
+                    } else if (text.isEmpty()) {
+                        mBinding.tvConversionResult.text = getString(R.string.entered_null)
+                    } else {
+                        mBinding.tvConversionResult.text =
+                            getString(R.string.entered_not_conversion_valute)
                     }
                 }
             }
@@ -68,7 +71,12 @@ class ConversionFragment : Fragment() {
     private fun initObservers() {
         mViewModel.valuteListLiveData.observe(this, {
             list = it.toMutableList()
-            mBinding.spinnerConversionTo.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, it.map { i -> i.CharCode })
+            mBinding.spinnerConversionTo.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, it.map { i -> "${i.Name} - ${i.CharCode}" })
         })
+    }
+
+    override fun onDestroy() {
+        mViewModel.valuteListLiveData.removeObservers(this)
+        super.onDestroy()
     }
 }

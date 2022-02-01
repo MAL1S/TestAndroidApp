@@ -1,7 +1,8 @@
-package com.example.testandroidapp.ui.valute_list
+package com.example.testandroidapp.ui
 
 import android.annotation.SuppressLint
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.testandroidapp.data.models.Valute
@@ -12,17 +13,17 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
-import java.util.*
 import javax.inject.Inject
 
 
 @HiltViewModel
-class ValueListViewModel @Inject constructor(
+class ValuteViewModel @Inject constructor(
     private val apiService: ValuteApiInterface,
     private val repository: Repository
 ) : ViewModel() {
 
-    val valuteListLiveData: MutableLiveData<List<Valute>> = MutableLiveData()
+    private val _valuteListLiveData: MutableLiveData<List<Valute>> = MutableLiveData()
+    val valuteListLiveData: LiveData<List<Valute>> = _valuteListLiveData
 
     @SuppressLint("CheckResult")
     fun getValuteList(ifUpdate: Boolean = false) {
@@ -32,7 +33,7 @@ class ValueListViewModel @Inject constructor(
             .subscribe({
                 val repositoryValuteList = repository.getValuteList()
                 if (repositoryValuteList != null && !ifUpdate) {
-                    valuteListLiveData.postValue(repositoryValuteList)
+                    _valuteListLiveData.postValue(repositoryValuteList)
                     Log.d("testing", "not updated")
                 } else {
                     Log.d("testing", "updated")
@@ -51,7 +52,7 @@ class ValueListViewModel @Inject constructor(
 
                     val valuteList = Json.decodeFromString<List<Valute>>(str)
                     repository.saveValuteList(valuteList)
-                    valuteListLiveData.postValue(valuteList)
+                    _valuteListLiveData.postValue(valuteList)
                 }
             }, {
                 Log.e("valute_list", it.message!!)

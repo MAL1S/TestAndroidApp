@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TestAndroidApp</string>
+    <string name="valute_money_amount">Amount:</string>
+    <string name="valute_rub">Rub.</string>
+    <string name="valute_with_colon">Currency:</string>
+    <string name="convert">Convert</string>
+    <string name="valutes">Currencies</string>
+    <string name="conversion">Conversion</string>
+    <string name="entered_nan">Not a number was entered, repeat the input</string>
+    <string name="entered_null">Input field is empty</string>
+    <string name="entered_not_conversion_valute">Currency for conversion is not chosen</string>
+    <string name="entered_right">%.4f %s</string>
+</resources>

@@ -1,5 +1,13 @@
 <resources>
     <string name="app_name">TestAndroidApp</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="valute_money_amount">Сумма:</string>
+    <string name="valute_rub">Руб.</string>
+    <string name="valute_with_colon">Валюта:</string>
+    <string name="convert">Конвертировать</string>
+    <string name="valutes">Валюты</string>
+    <string name="conversion">Конвертация</string>
+    <string name="entered_nan">Введено не число, повторите ввод</string>
+    <string name="entered_null">Поле ввода не заполнено</string>
+    <string name="entered_not_conversion_valute">Валюта для конвертации не выбрана</string>
+    <string name="entered_right">%.4f %s</string>
 </resources>

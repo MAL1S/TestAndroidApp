@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.testandroidapp.R
 import com.example.testandroidapp.databinding.FragmentValuteListBinding
+import com.example.testandroidapp.ui.ValuteViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
@@ -19,7 +20,7 @@ class ValuteListFragment : Fragment() {
 
     private val mBinding by viewBinding(FragmentValuteListBinding::bind)
 
-    private val mViewModel by viewModels<ValueListViewModel>()
+    private val mViewModel by viewModels<ValuteViewModel>()
 
     private lateinit var mAdapter: ValuteListRecyclerAdapter
 
@@ -83,5 +84,10 @@ class ValuteListFragment : Fragment() {
         timer.cancel()
         Log.d("testing", "PAUSED")
         super.onPause()
+    }
+
+    override fun onDestroy() {
+        mViewModel.valuteListLiveData.removeObservers(this)
+        super.onDestroy()
     }
 }

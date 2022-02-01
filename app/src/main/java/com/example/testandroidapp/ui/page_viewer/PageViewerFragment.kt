@@ -44,8 +44,8 @@ class PageViewerFragment : Fragment() {
         adapter = FragmentAdapter(fm, lifecycle)
         if (pager.adapter == null) {
             pager.adapter = adapter
-            tabLayout.addTab(tabLayout.newTab().setText("Valutes"))
-            tabLayout.addTab(tabLayout.newTab().setText("Conversion"))
+            tabLayout.addTab(tabLayout.newTab().setText(R.string.valutes))
+            tabLayout.addTab(tabLayout.newTab().setText(R.string.conversion))
             pager.isSaveEnabled = false
         }
 
